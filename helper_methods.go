@@ -40,6 +40,19 @@ func NewDeleteMessage(chatID int64, messageID int) DeleteMessageConfig {
 	}
 }
 
+// NewDeleteMessages creates a request to delete multiple messages. The messages have to be
+// in the same chat. Provide the message ids as an array of integers
+func NewDeleteMessages(chatID int64, messageIDs []int) DeleteMessagesConfig {
+	return DeleteMessagesConfig{
+		BaseChatMessages: BaseChatMessages{
+			ChatConfig: ChatConfig{
+				ChatID: chatID,
+			},
+			MessageIDs: messageIDs,
+		},
+	}
+}
+
 // NewMessageToChannel creates a new Message that is sent to a channel
 // by username.
 //
@@ -920,7 +933,7 @@ func NewDeleteChatPhoto(chatID int64) DeleteChatPhotoConfig {
 }
 
 // NewPoll allows you to create a new poll.
-func NewPoll(chatID int64, question string, options ...string) SendPollConfig {
+func NewPoll(chatID int64, question string, options ...InputPollOption) SendPollConfig {
 	return SendPollConfig{
 		BaseChat: BaseChat{
 			ChatConfig: ChatConfig{ChatID: chatID},
@@ -928,6 +941,13 @@ func NewPoll(chatID int64, question string, options ...string) SendPollConfig {
 		Question:    question,
 		Options:     options,
 		IsAnonymous: true, // This is Telegram's default.
+	}
+}
+
+// NewPollOption allows you to create poll option
+func NewPollOption(text string) InputPollOption {
+	return InputPollOption{
+		Text: text,
 	}
 }
 
@@ -1059,6 +1079,13 @@ func NewSetMyName(languageCode, name string) SetMyNameConfig {
 	return SetMyNameConfig{
 		Name:         name,
 		LanguageCode: languageCode,
+	}
+}
+
+// NewGetBusinessConnection gets business connection request struct
+func NewGetBusinessConnection(id string) GetBusinessConnectionConfig {
+	return GetBusinessConnectionConfig{
+		BusinessConnectionID: BusinessConnectionID(id),
 	}
 }
 
